@@ -1,5 +1,6 @@
 package com.circuit_breaker.publication.service;
 
+import com.circuit_breaker.publication.client.CommentClient;
 import com.circuit_breaker.publication.domain.Publication;
 import com.circuit_breaker.publication.mapper.PublicationMapper;
 import com.circuit_breaker.publication.repository.PublicationRepository;
@@ -14,6 +15,9 @@ public class PublicationService {
     private PublicationRepository publicationRepository;
 
     @Autowired
+    private CommentClient commentClient;
+
+    @Autowired
     private PublicationMapper publicationMapper;
 
     public void insert(Publication publication) {
@@ -25,8 +29,13 @@ public class PublicationService {
     }
 
     public Publication findById(String id) {
-        return publicationRepository.findById(id)
+        var publication = publicationRepository.findById(id)
                 .map(publicationMapper::toPublication)
                 .orElseThrow(RuntimeException::new);
+
+        var comments = commentClient.getComments(id);
+        publication.setComments(comments);
+
+        return publication;
     }
 }
