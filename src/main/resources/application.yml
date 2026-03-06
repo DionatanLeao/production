@@ -17,3 +17,5 @@ resilience4j.circuitbreaker:
     comments:
       slidingWindowSize: 8
       minimumNumberOfCalls: 4
+      permittedNumberOfCallsInHalfOpenState: 2
+      waitDurationInOpenState: 10000
