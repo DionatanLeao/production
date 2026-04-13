@@ -21,7 +21,7 @@ public class ApiExceptionHandler {
                 .timestamp(System.currentTimeMillis())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message(exception.getMessage())
-                .path(request.getRequestId())
+                .path(request.getRequestURI())
                 .build();
 
         log.error("[ERROR] payload={}", error, exception);
