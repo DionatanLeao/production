@@ -9,3 +9,6 @@ spring:
       username: root
       password: example
       database: circuit-breaker
+client:
+  comments:
+    url: http://localhost:8082
