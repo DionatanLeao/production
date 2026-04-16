@@ -16,13 +16,18 @@ public class CommentService {
     @Autowired
     private CommentClient commentClient;
 
+    @Autowired
+    private RedisService redisService;
+
     @CircuitBreaker(name = "comments", fallbackMethod = "getCommentsFallback")
     public List<Comment> getComments(String id) {
-        return commentClient.getComments(id);
+        List<Comment> comments = commentClient.getComments(id);
+        redisService.save(comments, id);
+        return comments;
     }
 
     private List<Comment> getCommentsFallback(String id, Throwable cause) {
         log.warn("[WARN] fallback with id {}", id);
-        return List.of();
+        return redisService.findById(id);
     }
 }
